@@ -28,9 +28,6 @@ const getListarVeiculos = async function(){
             for(let veiculo of dadosVeiculos){
                 veiculo.cliente = await clienteDAO.selectByIdCliente(veiculo.tbl_cliente_id)
             }
-
-
-
         // Montando a estrutura do JSOm
         veiculosJSON.veiculos = dadosVeiculos;
         veiculosJSON.quantidade = dadosVeiculos.length;

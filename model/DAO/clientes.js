@@ -1,11 +1,17 @@
+// CRUD Serviços
+// Autor: Pedro Pedraga
+// Data: 21/05/24
+
+const { PrismaClient } = require ('@prisma/client')
+
+// Instaciando o o bjeto prisma com as caracteristicas do prisma client
+const prisma = new PrismaClient();
+
 // Listar todos os filmes presentes na tabela 
 const selectAllClientes = async function(){
 
     // Script sql para listar todos os registros
     let sql = 'select * from tbl_cliente order by id desc';
-
-    // $queryRawUnsafe(sql)  = Encaminha apenas a variável
-    // $queryRaw('select * from tbl_filme) = Encaminha o script do banco 
 
     // Executa o script no banco de dados e recebe o retorno dos dados da variavel rsClientes
     let rsClientes = await prisma.$queryRawUnsafe(sql)

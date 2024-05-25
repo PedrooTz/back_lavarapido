@@ -37,7 +37,9 @@ const bodyParserJSON = bodyParser.json();
 
     const controllerServicos = require('./controller/controller_servicos.js');
 
-    const controllerVeiculos = require('./controller/controller_veiculos');
+    const controllerVeiculos = require('./controller/controller_veiculos.js');
+
+    const controllerClientes = require('./controller/controller_clientes.js')
 
 
 // ************************************************************************************************* //
@@ -117,6 +119,12 @@ app.put('/v1/lavarapido/updateservico/:id', cors(), bodyParserJSON, async functi
     response.json(dadosServicos)
 })
 
+/*******************************************************************************/
+/*******************************************************************************/
+                                // CRUD VEÍCULOS
+/*******************************************************************************/
+/*******************************************************************************/
+
 
 
 
@@ -187,6 +195,39 @@ app.put('/v1/lavarapido/updateveiculo/:id', cors(), bodyParserJSON, async functi
     response.json(dadosVeiculos)
 })
 
+/*******************************************************************************/
+/*******************************************************************************/
+                                // CRUD CLIENTES
+/*******************************************************************************/
+/*******************************************************************************/
+
+app.get('/v1/lavarapido/clientes', cors(), async function(request,response,next){
+    
+    // Chama a função para retornar os dados do filme
+    let dadosClientes = await controllerClientes.getListarClientes();
+
+    // Validação para verificar se existem dados
+    if(dadosClientes){
+        response.json(dadosClientes);
+        response.status(200);
+    }else{
+        response.json({message: 'Nenhum registro encontrado'})
+        response.status()
+    }
+});
+
+
+app.get('/v1/lavarapido/cliente/:id', cors(), async function(request, response, next){
+    // Recebe o id da requisição 
+    let idCliente = request.params.id;
+  
+    // Solicita para a controller o ator filtrando pelo id
+    let dadosClientes = await controllerClientes.getBuscarCliente(idCliente);
+  
+     response.status(dadosClientes.status_code);
+     response.json(dadosClientes);
+   
+});
 
 
 

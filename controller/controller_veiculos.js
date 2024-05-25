@@ -5,6 +5,7 @@
 const message = require('../modulo/config.js')
 
 const veiculoDAO = require('../model/DAO/veiculos.js')
+const clienteDAO = require('../model/DAO/clientes.js')
 
 // Função para listar os filmes existentes 
 const getListarVeiculos = async function(){
@@ -24,6 +25,12 @@ const getListarVeiculos = async function(){
     // Verifica se existem dados retornados do DAO
     if(dadosVeiculos){
         if(dadosVeiculos.length > 0){
+            for(let veiculo of dadosVeiculos){
+                veiculo.cliente = await clienteDAO.selectByIdCliente(veiculo.tbl_cliente_id)
+            }
+
+
+
         // Montando a estrutura do JSOm
         veiculosJSON.veiculos = dadosVeiculos;
         veiculosJSON.quantidade = dadosVeiculos.length;
@@ -122,8 +129,10 @@ const setInserirNovoVeiculo = async function(dadosVeiculos, contentType){
         // Validação de campos obrigatórios e consistência de dados
         if( dadosVeiculos.nome == ''                       || dadosVeiculos.nome == undefined              || dadosVeiculos.nome.length > 150 ||
             dadosVeiculos.placa == ''  || dadosVeiculos.placa == undefined || dadosVeiculos.placa.length > 8 ||
-            dadosVeiculos.modelo == '' || dadosVeiculos.modelo == undefined || dadosVeiculos.modelo.length > 1000
+            dadosVeiculos.modelo == '' || dadosVeiculos.modelo == undefined || dadosVeiculos.modelo.length > 1000  ||
+            dadosVeiculos.tbl_cliente_id == '' || dadosVeiculos.tbl_cliente_id == undefined  || dadosVeiculos.tbl_cliente_id.length > 1
         ){
+            console.log(dadosVeiculos)
             return message.ERROR_REQUIRED_FIELDS // 400 Campos obrigatórios / Incorretos
          }else{
           
@@ -157,9 +166,67 @@ const setInserirNovoVeiculo = async function(dadosVeiculos, contentType){
     }
          
     }
+
+    const setUpdateVeiculo = async function(id, contentType, dadosVeiculos){
+        try{
+            let idVeiculo = id;
+            console.log(idVeiculo)
+    
+            if(idVeiculo == '' || idVeiculo == undefined || isNaN (idVeiculo)){
+                return message.ERROR_INVALID_ID;
+    
+               
+                
+            }else{
+    
+            if(String(contentType).toLowerCase() == 'application/json'){
+                let updateVeiculoJSON = {};
+                
+                if(dadosVeiculos.nome == ''                       || dadosVeiculos.nome == undefined              || dadosVeiculos.nome.length > 150 ||
+                dadosVeiculos.placa == ''  || dadosVeiculos.placa == undefined || dadosVeiculos.placa.length > 8 ||
+                dadosVeiculos.modelo == '' || dadosVeiculos.modelo == undefined || dadosVeiculos.modelo.length > 1000  ||
+                dadosVeiculos.tbl_cliente_id == '' || dadosVeiculos.tbl_cliente_id == undefined  || dadosVeiculos.tbl_cliente_id.length > 1
+        ){
+                return message.ERROR_REQUIRED_FIELDS
+            } else {
+    
+                let validateStatus = true;
+    
+                let veiculoByiD = await veiculoDAO.selectByIdVeiculo(id)
+    
+                if(veiculoByiD.length > 0){
+                    if (validateStatus){
+                        let updateVeiculo = await veiculoDAO.updateVeiculo(id,dadosVeiculos);
+        
+                        if(updateVeiculo){
+                          
+                            updateVeiculoJSON.veiculo = dadosVeiculos
+                            updateVeiculoJSON.status = message.SUCESS_UPDATED_ITEM.status
+                            updateVeiculoJSON.status_code = message.SUCESS_UPDATED_ITEM.status_code
+                            updateVeiculoJSON.message = message.SUCESS_UPDATED_ITEM.message
+        
+                            return updateVeiculoJSON;
+                        } else {
+                             return message.ERROR_INTERNAL_SERVER_DB
+                        }
+                    }
+                }else{
+                    return message.ERROR_NOT_FOUND
+                }
+            }
+            } else {
+                return message.ERROR_CONTENT_TYPE
+            }
+            }
+    
+        } catch (error) {
+            return message.ERROR_INTERNAL_SERVER
+        }
+    }
 module.exports = {
     setExcluirVeiculo,
     getBuscarVeiculo,
     getListarVeiculos,
-    setInserirNovoVeiculo
+    setInserirNovoVeiculo,
+    setUpdateVeiculo
 }

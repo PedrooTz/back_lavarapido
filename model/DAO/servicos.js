@@ -102,6 +102,33 @@ const insertServico =  async function(dadosServicos) {
     }
 }
 
+const updateServico =  async function(id, dadosServicos) {
+    
+    try{
+        let sql;
+
+            sql = `UPDATE tbl_servico SET nome = '${dadosServicos.nome}',
+                descricao = '${dadosServicos.descricao}',
+                foto = '${dadosServicos.foto}'
+                where id = ${id}`
+        
+                console.log(sql);
+
+        let result = await prisma.$executeRawUnsafe(sql);
+        
+
+        if (result)
+            return result
+        else
+            return false;
+        
+    } catch (error) {
+        console.log(error)
+        return false
+
+    }
+}
+
 
 
 module.exports = {
@@ -109,5 +136,6 @@ module.exports = {
     selectByIdServico,
     deleteServico,
     selectIdServico,
-    insertServico
+    insertServico,
+    updateServico
 }

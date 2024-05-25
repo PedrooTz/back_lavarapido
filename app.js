@@ -95,6 +95,29 @@ app.post('/v1/lavarapido/insertservico', cors(), bodyParserJSON, async function(
    response.json(resultDados);
 });
 
+// Deleta um filme a partir de seu ID
+app.delete('/v1/lavarapido/deleteservico/:id', cors(), async function(request, response, next){
+
+    let idServico = request.params.id;
+
+    let dadosServicos = await controllerServicos.setExcluirServico(idServico);
+
+    response.status(dadosServicos.status_code);
+    response.json(dadosServicos);
+});
+
+app.put('/v1/lavarapido/updateservico/:id', cors(), bodyParserJSON, async function(request,response, next){
+    let idServico = request.params.id
+    let contentType = request.headers['content-type']
+    let dadosBody = request.body
+
+    let dadosServicos = await controllerServicos.setUpdateServico(idServico, contentType, dadosBody);
+
+    response.status(dadosServicos.status_code);
+    response.json(dadosServicos)
+})
+
+
 
 
 app.get('/v1/lavarapido/veiculos', cors(), async function(request,response,next){
@@ -151,6 +174,19 @@ app.delete('/v1/lavarapido/deleteveiculo/:id', cors(), async function(request, r
     response.status(dadosVeiculos.status_code);
     response.json(dadosVeiculos);
 });
+
+// Faz o update de um filme existente
+app.put('/v1/lavarapido/updateveiculo/:id', cors(), bodyParserJSON, async function(request,response, next){
+    let idVeiculo = request.params.id
+    let contentType = request.headers['content-type']
+    let dadosBody = request.body
+
+    let dadosVeiculos = await controllerVeiculos.setUpdateVeiculo(idVeiculo, contentType, dadosBody);
+
+    response.status(dadosVeiculos.status_code);
+    response.json(dadosVeiculos)
+})
+
 
 
 

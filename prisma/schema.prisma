@@ -7,9 +7,30 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model tbl_servicos {
+model tbl_cliente {
+  id              Int           @id @default(autoincrement())
+  nome            String        @db.VarChar(80)
+  data_nascimento DateTime      @db.Date
+  telefone        String        @db.VarChar(12)
+  email           String?       @db.VarChar(100)
+  img             String?       @db.VarChar(100)
+  tbl_veiculo     tbl_veiculo[]
+}
+
+model tbl_servico {
   id        Int    @id @default(autoincrement())
   nome      String @db.VarChar(80)
   descricao String @db.VarChar(255)
-  img       String @db.VarChar(1000)
+  foto      String @db.VarChar(1000)
+}
+
+model tbl_veiculo {
+  id             Int         @id @default(autoincrement())
+  nome           String      @db.VarChar(80)
+  placa          String      @db.VarChar(7)
+  modelo         String      @db.VarChar(45)
+  tbl_cliente_id Int
+  tbl_cliente    tbl_cliente @relation(fields: [tbl_cliente_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "tbl_veiculo_ibfk_1")
+
+  @@index([tbl_cliente_id], map: "tbl_cliente_id")
 }

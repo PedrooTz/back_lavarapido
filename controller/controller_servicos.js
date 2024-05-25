@@ -164,9 +164,66 @@ const setInserirNovoServico = async function(dadosServicos, contentType){
     }
          
     }
+
+    const setUpdateServico = async function(id, contentType, dadosServicos){
+        try{
+            let idServico = id;
+            console.log(idServico)
+    
+            if(idServico == '' || idServico == undefined || isNaN (idServico)){
+                return message.ERROR_INVALID_ID;
+    
+               
+                
+            }else{
+    
+            if(String(contentType).toLowerCase() == 'application/json'){
+                let updateServicoJSON = {};
+                
+                if( dadosServicos.nome == ''                       || dadosServicos.nome == undefined              || dadosServicos.nome.length > 150 ||
+                dadosServicos.descricao == ''  || dadosServicos.descricao == undefined || dadosServicos.descricao.length > 1000 ||
+                dadosServicos.foto == '' || dadosServicos.foto == undefined || dadosServicos.foto.length > 1000
+        ){
+                return message.ERROR_REQUIRED_FIELDS
+            } else {
+    
+                let validateStatus = true;
+    
+                let servicoByiD = await servicosDAO.selectByIdServico(id)
+    
+                if(servicoByiD.length > 0){
+                    if (validateStatus){
+                        let updateServico = await servicosDAO.updateServico(id,dadosServicos);
+        
+                        if(updateServico){
+                          
+                            updateServicoJSON.servico = dadosServicos
+                            updateServicoJSON.status = message.SUCESS_UPDATED_ITEM.status
+                            updateServicoJSON.status_code = message.SUCESS_UPDATED_ITEM.status_code
+                            updateServicoJSON.message = message.SUCESS_UPDATED_ITEM.message
+        
+                            return updateServicoJSON;
+                        } else {
+                             return message.ERROR_INTERNAL_SERVER_DB
+                        }
+                    }
+                }else{
+                    return message.ERROR_NOT_FOUND
+                }
+            }
+            } else {
+                return message.ERROR_CONTENT_TYPE
+            }
+            }
+    
+        } catch (error) {
+            return message.ERROR_INTERNAL_SERVER
+        }
+    }
 module.exports = {
     setExcluirServico,
     getBuscarServico,
     getListarServicos,
-    setInserirNovoServico
+    setInserirNovoServico,
+    setUpdateServico
 }

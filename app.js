@@ -41,6 +41,8 @@ const bodyParserJSON = bodyParser.json();
 
     const controllerClientes = require('./controller/controller_clientes.js')
 
+    const controllerCategorias = require('./controller/controller_categoria.js')
+
 
 // ************************************************************************************************* //
 //Função para configurar as permissões do cors
@@ -229,6 +231,56 @@ app.get('/v1/lavarapido/cliente/:id', cors(), async function(request, response, 
    
 });
 
+app.post('/v1/lavarapido/insertcliente', cors(), bodyParserJSON, async function(request, response, next){
+
+    // Recebe o content-type da requisição (API deve receber application/json )
+   let contentType = request.headers['content-type'];
+
+   // Recebe os dados encaminhados na requisição do body (JSON)
+   let dadosBody = request.body;
+
+   
+   // Encaminha os dados da requisição para a controller enviar para o banco de dados
+   let dadosClientes = await controllerClientes.setinserirCliente(dadosBody, contentType);
+
+   response.status(dadosClientes.status_code);
+   response.json(dadosClientes);
+});
+
+
+/*******************************************************************************/
+/*******************************************************************************/
+                                // CRUD CATEGORIAS
+/*******************************************************************************/
+/*******************************************************************************/
+
+app.get('/v1/lavarapido/categorias', cors(), async function(request,response,next){
+    
+    // Chama a função para retornar os dados do filme
+    let dadosCategoria = await controllerCategorias.getListarCategoria();
+
+    // Validação para verificar se existem dados
+    if(dadosCategoria){
+        response.json(dadosCategoria);
+        response.status(200);
+    }else{
+        response.json({message: 'Nenhum registro encontrado'})
+        response.status()
+    }
+});
+
+
+app.get('/v1/lavarapido/categoria/:id', cors(), async function(request, response, next){
+    // Recebe o id da requisição 
+    let idCategoria = request.params.id;
+  
+    // Solicita para a controller o ator filtrando pelo id
+    let dadosCategoria = await controllerCategorias.getBuscarCategoria(idCategoria);
+  
+     response.status(dadosCategoria.status_code);
+     response.json(dadosCategoria);
+   
+});
 
 
 

@@ -4,32 +4,32 @@
 
 const message = require('../modulo/config.js')
 
-const categoriaDAO = require('../model/DAO/categoria.js')
+const agendaDAO = require('../model/DAO/agenda.js')
 
 // Função para listar os filmes existentes 
-const getListarCategoria = async function(){
+const getListarAgenda = async function(){
     
-    let listaCategoria;
+    let listaAgenda;
     // Cria uma variavel do tipo json
-    let categoriaJSON = {};
+    let agendaJSON = {};
 
-    if ((listaCategoria)){
-        return listaCategoria;
+    if ((listaAgenda)){
+        return listaAgenda;
     }else{
     
     // Chama a função do DAO para buscar os dados do banco de dados
-    let dadosCategoria = await categoriaDAO.selectAllCategorias();
+    let dadosAgenda = await agendaDAO.selectAllAgenda();
 
     
     // Verifica se existem dados retornados do DAO
-    if(dadosCategoria){
-        if(dadosCategoria.length > 0){
+    if(dadosAgenda){
+        if(dadosAgenda.length > 0){
         // Montando a estrutura do JSOm
-        categoriaJSON.categorias = dadosCategoria;
-        categoriaJSON.quantidade = dadosCategoria.length;
-        categoriaJSON.status_code = 200;
+        agendaJSON.dias = dadosAgenda;
+        agendaJSON.quantidade = dadosAgenda.length;
+        agendaJSON.status_code = 200;
         // Retorna o JSON montado
-        return categoriaJSON; // 200
+        return agendaJSON; // 200
         }else{
             return message.ERROR_NOT_FOUND // 404
         }
@@ -41,29 +41,29 @@ const getListarCategoria = async function(){
 }
 
 //Função para buscar um filme pelo id
-const getBuscarCategoria = async function(id){
+const getBuscarAgenda = async function(id){
     // Recebe o id do filme
-    let idCategoria = id;
+    let idAgenda = id;
 
     // Variável para criar o json do filme
-    let categoriaJSON = {};
+    let agendaJSON = {};
 
     // Validação para ID vazio, indefinido ou não numérico
-    if (idCategoria == '' || idCategoria == undefined || isNaN(idCategoria)){
+    if (idAgenda == '' || idAgenda == undefined || isNaN(idAgenda)){
         return message.ERROR_INVALID_ID;
     }else{
 
         // Solicita para o DAO a busca do filme pelo iD
-        let dadosCategoria = await categoriaDAO.selectByIdCategoria(id)
+        let dadosAgenda = await agendaDAO.selectByIdAgenda(id)
 
         // Validação para verificar se existem dados encontrados
-        if(dadosCategoria){
+        if(dadosAgenda){
             // Validação para verificar se existem dados de retorno
-            if(dadosCategoria.length > 0){
-            categoriaJSON.categoria = dadosCategoria;
-            categoriaJSON.status_code = 200
+            if(dadosAgenda.length > 0){
+            agendaJSON.dia = dadosAgenda;
+            agendaJSON.status_code = 200
 
-            return categoriaJSON; // 200
+            return agendaJSON; // 200
         }else{
             return message.ERROR_NOT_FOUND; //404
         }
@@ -75,20 +75,20 @@ const getBuscarCategoria = async function(id){
 
 }
 
-const setExcluirCategoria = async  function(id){
+const setExcluirAgenda = async  function(id){
 
     try {
 
-        let idCategoria = id; 
+        let idAgenda = id; 
     
-        if (idCategoria  == '' || idCategoria == undefined || isNaN(idCategoria)){
+        if (idAgenda  == '' || idAgenda == undefined || isNaN(idAgenda)){
             return message.ERROR_INVALID_ID;
         }else{
-            let chamarConst = await categoriaDAO.selectByIdCategoria(idCategoria)
+            let chamarConst = await agendaDAO.selectByIdAgenda(idAgenda)
  
             if(chamarConst.length > 0){
            
-                let dadosAgenda = await categoriaDAO.deleteCategoria(id)
+                let dadosAgenda = await agendaDAO.deleteAgenda(id)
         
                 // Validação para verificar se existem dados encontrados
                 if(dadosAgenda){
@@ -112,7 +112,7 @@ const setExcluirCategoria = async  function(id){
 
 
 
-const setInserirNovaCategoria = async function(dadosCategoria, contentType){
+const setInserirNovaAgenda = async function(dadosAgenda, contentType){
 
   
     try{
@@ -123,30 +123,30 @@ const setInserirNovaCategoria = async function(dadosCategoria, contentType){
         
     
         // Cria a variável json
-        let resultDadosCategoria = {}
+        let resultDadosAgenda = {}
     
         // Validação de campos obrigatórios e consistência de dados
-        if( dadosCategoria.nome == ''                       || dadosCategoria.nome == undefined              || dadosCategoria.nome.length > 150
+        if( dadosAgenda.dia == ''                       || dadosAgenda.dia == undefined              || dadosAgenda.dia.length > 150
         ){
             return message.ERROR_REQUIRED_FIELDS // 400 Campos obrigatórios / Incorretos
          }else{
           
             // Encaminha os dados para o DAO, inserir no Banco de Dados
-            let novoServico = await categoriaDAO.insertCategoria(dadosCategoria);
-            let idSelect = await categoriaDAO.selectIdCategoria();
-            dadosCategoria.id = Number (idSelect[0].id)
+            let novaAgenda = await agendaDAO.insertAgenda(dadosAgenda);
+            let idSelect = await agendaDAO.selectIdAgenda();
+            dadosAgenda.id = Number (idSelect[0].id)
             
             // Validação de inserção de dados no banco de dados 
-            if(novoServico){
+            if(novaAgenda){
     
                
                 // Cria o padrão de JSOn para o retorno dos dados criados no banco de dados
-                resultDadosCategoria.status = message.SUCESS_CREATED_ITEM.status;
-                resultDadosCategoria.status_code = message.SUCESS_CREATED_ITEM.status_code;
-                resultDadosCategoria.message = message.SUCESS_CREATED_ITEM.message;
-                resultDadosCategoria.categoria = dadosCategoria;
+                resultDadosAgenda.status = message.SUCESS_CREATED_ITEM.status;
+                resultDadosAgenda.status_code = message.SUCESS_CREATED_ITEM.status_code;
+                resultDadosAgenda.message = message.SUCESS_CREATED_ITEM.message;
+                resultDadosAgenda.dia = dadosAgenda;
     
-                return resultdadosServicos; // 201
+                return resultDadosAgenda; // 201
             } else{
                 return message.ERROR_INTERNAL_SERVER_DB; // 500 Erro na camada do DAO (Banco)
                 
@@ -162,12 +162,12 @@ const setInserirNovaCategoria = async function(dadosCategoria, contentType){
          
     }
 
-    const setUpdateCategoria = async function(id, contentType, dadosCategoria){
+    const setUpdateAgenda = async function(id, contentType, dadosAgenda){
         try{
-            let idCategoria = id;
-            console.log(idCategoria)
+            let idAgenda = id;
+            console.log(idAgenda)
     
-            if(idCategoria == '' || idCategoria == undefined || isNaN (idCategoria)){
+            if(idAgenda == '' || idAgenda == undefined || isNaN (idAgenda)){
                 return message.ERROR_INVALID_ID;
     
                
@@ -175,29 +175,29 @@ const setInserirNovaCategoria = async function(dadosCategoria, contentType){
             }else{
     
             if(String(contentType).toLowerCase() == 'application/json'){
-                let updateCategoriaJson = {};
+                let updateAgendaJSON = {};
                 
-                if( dadosCategoria.nome == ''                       || dadosCategoria.nome == undefined              || dadosCategoria.nome.length > 150 
+                if( dadosAgenda.dia == ''                       || dadosAgenda.dia == undefined              || dadosAgenda.dia.length > 150 
         ){
                 return message.ERROR_REQUIRED_FIELDS
             } else {
     
                 let validateStatus = true;
     
-                let servicoByiD = await categoriaDAO.selectByIdCategoria(id)
+                let agendaById = await agendaDAO.selectByIdAgenda(id)
     
-                if(servicoByiD.length > 0){
+                if(agendaById.length > 0){
                     if (validateStatus){
-                        let updateServico = await categoriaDAO.updateCategoria(id,dadosCategoria);
+                        let updateAgenda = await agendaDAO.updateAgenda(id,dadosAgenda);
         
-                        if(updateServico){
+                        if(updateAgenda){
                           
-                            updateCategoriaJson.categoria = dadosCategoria
-                            updateCategoriaJson.status = message.SUCESS_UPDATED_ITEM.status
-                            updateCategoriaJson.status_code = message.SUCESS_UPDATED_ITEM.status_code
-                            updateCategoriaJson.message = message.SUCESS_UPDATED_ITEM.message
+                            updateAgendaJSON.categoria = dadosAgenda
+                            updateAgendaJSON.status = message.SUCESS_UPDATED_ITEM.status
+                            updateAgendaJSON.status_code = message.SUCESS_UPDATED_ITEM.status_code
+                            updateAgendaJSON.message = message.SUCESS_UPDATED_ITEM.message
         
-                            return updateCategoriaJson;
+                            return updateAgendaJSON;
                         } else {
                              return message.ERROR_INTERNAL_SERVER_DB
                         }
@@ -217,9 +217,9 @@ const setInserirNovaCategoria = async function(dadosCategoria, contentType){
     }
 
 module.exports = {
-    getBuscarCategoria,
-    getListarCategoria,
-    setExcluirCategoria,
-    setInserirNovaCategoria,
-    setUpdateCategoria
+    getBuscarAgenda,
+    getListarAgenda,
+    setExcluirAgenda,
+    setInserirNovaAgenda,
+    setUpdateAgenda
 }

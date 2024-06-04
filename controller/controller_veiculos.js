@@ -6,6 +6,7 @@ const message = require('../modulo/config.js')
 
 const veiculoDAO = require('../model/DAO/veiculos.js')
 const clienteDAO = require('../model/DAO/clientes.js')
+const categoriaDAO = require('../model/DAO/categoria.js')
 
 // Função para listar os filmes existentes 
 const getListarVeiculos = async function(){
@@ -27,6 +28,7 @@ const getListarVeiculos = async function(){
         if(dadosVeiculos.length > 0){
             for(let veiculo of dadosVeiculos){
                 veiculo.cliente = await clienteDAO.selectByIdCliente(veiculo.tbl_cliente_id)
+                veiculo.categoria = await categoriaDAO.selectByIdCategoria(veiculo.tbl_categoria_id)
             }
         // Montando a estrutura do JSOm
         veiculosJSON.veiculos = dadosVeiculos;
@@ -62,6 +64,10 @@ const getBuscarVeiculo = async function(id){
 
         // Validação para verificar se existem dados encontrados
         if(dadosVeiculos){
+            for(let veiculo of dadosVeiculos){
+                veiculo.cliente = await clienteDAO.selectByIdCliente(veiculo.tbl_cliente_id)
+                veiculo.categoria = await categoriaDAO.selectByIdCategoria(veiculo.tbl_categoria_id)
+            }
             // Validação para verificar se existem dados de retorno
             if(dadosVeiculos.length > 0){
             veiculosJSON.veiculo = dadosVeiculos;

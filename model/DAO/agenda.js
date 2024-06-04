@@ -8,65 +8,65 @@ const { PrismaClient } = require ('@prisma/client')
 const prisma = new PrismaClient();
 
 // Listar todos os filmes presentes na tabela 
-const selectAllCategorias = async function(){
+const selectAllAgenda = async function(){
 
     // Script sql para listar todos os registros
-    let sql = 'select * from tbl_categoria order by id desc';
-    let rsCategoria = await prisma.$queryRawUnsafe(sql)
+    let sql = 'select * from tbl_agenda order by id desc';
+    let rsAgenda = await prisma.$queryRawUnsafe(sql)
     
-     if(rsCategoria.length > 0)
-     return rsCategoria;
+     if(rsAgenda.length > 0)
+     return rsAgenda;
      else
         return false
 
 
 }
 
-const selectByIdCategoria =  async function(id){    
+const selectByIdAgenda =  async function(id){    
     try {
 
-    let sql = `select * from tbl_categoria where id = ${id}`
+    let sql = `select * from tbl_agenda where id = ${id}`
 
-    let rsCategoria = await prisma.$queryRawUnsafe(sql);
-        return rsCategoria;
+    let rsAgenda = await prisma.$queryRawUnsafe(sql);
+        return rsAgenda;
 
     } catch (error) {
         return false;
         
     }
 } 
-const deleteCategoria =  async function(id){    
+const deleteAgenda =  async function(id){    
     try {
 
-    let sql = `delete from tbl_categoria where id = ${id}`
+    let sql = `delete from tbl_agenda where id = ${id}`
 
-    let rsCategoria = await prisma.$queryRawUnsafe(sql);
-        return rsCategoria;
+    let rsAgenda = await prisma.$queryRawUnsafe(sql);
+        return rsAgenda;
 
     } catch (error) {
         return false;
         
     }
 }
-const selectIdCategoria = async function() {
+const selectIdAgenda = async function() {
 
     try {
 
-    let sql = `select CAST(last_insert_id() as DECIMAL) as id from tbl_categoria limit 1`;
+    let sql = `select CAST(last_insert_id() as DECIMAL) as id from tbl_agenda limit 1`;
 
-    let categoriaId = await prisma.$queryRawUnsafe(sql)
-     return categoriaId
+    let agendaId = await prisma.$queryRawUnsafe(sql)
+     return agendaId
     } catch (error) {
         return false
         
     }   
 }
 
-const insertCategoria =  async function(dadosCategoria) {
+const insertAgenda =  async function(dadosAgenda) {
     
     try {
 
-     let sql = `insert into tbl_categoria(nome) values ('${dadosCategoria.nome}')`
+     let sql = `insert into tbl_agenda(nome, descricao) values ('${dadosAgenda.nome}', '${dadosAgenda.descricao}')`
             
         // Executa o script SQL no banco de dados | Devemos usar execute e não query!
         // Execute deve ser utilizado para insert, update e delete, onde o banco não devolve dados
@@ -85,12 +85,12 @@ const insertCategoria =  async function(dadosCategoria) {
     }
 }
 
-const updateCategoria =  async function(id, dadosCategoria) {
+const updateAgenda =  async function(id, dadosAgenda) {
     
     try{
         let sql;
 
-            sql = `UPDATE tbl_categoria SET nome = '${dadosCategoria.nome}'
+            sql = `UPDATE tbl_agenda SET nome = '${dadosAgenda.dia}',
                 where id = ${id}`
         
                 console.log(sql);
@@ -110,10 +110,9 @@ const updateCategoria =  async function(id, dadosCategoria) {
     }
 }
 module.exports = {
-    selectAllCategorias,
-    selectByIdCategoria,
-    selectIdCategoria,
-    insertCategoria,
-    updateCategoria,
-    deleteCategoria
+    selectAllAgenda,
+    selectByIdAgenda,
+    selectIdAgenda,
+    deleteAgenda,
+    insertAgenda,updateAgenda
 }

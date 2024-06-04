@@ -307,6 +307,47 @@ app.get('/v1/lavarapido/categoria/:id', cors(), async function(request, response
    
 });
 
+app.delete('/v1/lavarapido/deletecategoria/:id', cors(), async function(request, response, next){
+    // Recebe o id da requisição 
+    let idCategoria = request.params.id;
+  
+    // Solicita para a controller o ator filtrando pelo id
+    let dadosCategoria = await controllerCategorias.setExcluirCategoria(idCategoria);
+  
+     response.status(dadosCategoria.status_code);
+     response.json(dadosCategoria);
+   
+});
+
+app.post('/v1/lavarapido/insertcategoria', cors(), bodyParserJSON, async function(request, response, next){
+
+    // Recebe o content-type da requisição (API deve receber application/json )
+   let contentType = request.headers['content-type'];
+
+   // Recebe os dados encaminhados na requisição do body (JSON)
+   let dadosBody = request.body;
+
+   
+   // Encaminha os dados da requisição para a controller enviar para o banco de dados
+   let dadosCategoria = await controllerCategorias.setInserirNovaCategoria(dadosBody, contentType);
+
+   response.status(dadosCategoria.status_code);
+   response.json(dadosCategoria);
+});
+
+
+app.put('/v1/lavarapido/updatecategoria/:id', cors(), bodyParserJSON, async function(request,response, next){
+    let idCategoria = request.params.id
+    let contentType = request.headers['content-type']
+    let dadosBody = request.body
+
+    let dadosCategoria = await controllerCategorias.setUpdateCategoria(idCategoria, contentType, dadosBody);
+
+    response.status(dadosCategoria.status_code);
+    response.json(dadosCategoria)
+})
+
+
 
 
 

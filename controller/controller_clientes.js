@@ -88,7 +88,7 @@ const setExcluirCliente = async  function(id){
  
             if(chamarConst.length > 0){
            
-                let dadosClientes = await servicosDAO.deleteServico(id)
+                let dadosClientes = await clientesDAO.deleteCliente(id)
         
                 // Validação para verificar se existem dados encontrados
                 if(dadosClientes){
@@ -104,6 +104,7 @@ const setExcluirCliente = async  function(id){
         }
 
     } catch (error) {
+        console.log(error)
         return message.ERROR_INTERNAL_SERVER
     }
 
@@ -192,11 +193,11 @@ const setinserirCliente = async function(dadosClientes, contentType){
     
                 let validateStatus = true;
     
-                let servicoByiD = await servicosDAO.selectByIdServico(id)
+                let servicoByiD = await clientesDAO.selectByIdCliente(id)
     
                 if(servicoByiD.length > 0){
                     if (validateStatus){
-                        let updateServico = await servicosDAO.updateServico(id,dadosClientes);
+                        let updateServico = await clientesDAO.updateCliente(id,dadosClientes);
         
                         if(updateServico){
                           
@@ -220,6 +221,7 @@ const setinserirCliente = async function(dadosClientes, contentType){
             }
     
         } catch (error) {
+            console.log(error)
             return message.ERROR_INTERNAL_SERVER
         }
     }

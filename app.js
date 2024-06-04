@@ -231,6 +231,19 @@ app.get('/v1/lavarapido/cliente/:id', cors(), async function(request, response, 
    
 });
 
+app.delete('/v1/lavarapido/deletecliente/:id', cors(), async function(request, response, next){
+    // Recebe o id da requisição 
+    let idCliente = request.params.id;
+  
+    // Solicita para a controller o ator filtrando pelo id
+    let dadosClientes = await controllerClientes.setExcluirCliente(idCliente);
+  
+     response.status(dadosClientes.status_code);
+     response.json(dadosClientes);
+   
+});
+
+
 app.post('/v1/lavarapido/insertcliente', cors(), bodyParserJSON, async function(request, response, next){
 
     // Recebe o content-type da requisição (API deve receber application/json )
@@ -246,6 +259,18 @@ app.post('/v1/lavarapido/insertcliente', cors(), bodyParserJSON, async function(
    response.status(dadosClientes.status_code);
    response.json(dadosClientes);
 });
+
+app.put('/v1/lavarapido/updatecliente/:id', cors(), bodyParserJSON, async function(request,response, next){
+    let idCliente = request.params.id
+    let contentType = request.headers['content-type']
+    let dadosBody = request.body
+
+    let dadosClientes = await controllerClientes.setUpdateCliente(idCliente, contentType, dadosBody);
+
+    response.status(dadosClientes.status_code);
+    response.json(dadosClientes)
+})
+
 
 
 /*******************************************************************************/

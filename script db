@@ -1,0 +1,172 @@
+create database db_lavarapido_ab;
+use db_lavarapido_ab;
+drop database db_lavarapido_ab;
+
+create table tbl_cliente(
+id int not null auto_increment primary key,
+nome varchar(80) not null,
+data_nascimento date not null,
+telefone varchar(12) not null,
+email varchar(100),
+img varchar(100)
+
+);
+
+create table tbl_servico(
+id int not null auto_increment primary key,
+nome varchar(80) not null,
+descricao varchar(255) not null,
+foto varchar(1000) not null,
+id_pagamento int not null,
+
+foreign key(id_pagamento) references tbl_pagamentos(id)
+);
+
+drop table tbl_servico;
+
+create table tbl_agenda(
+id int not null auto_increment primary key,
+calendario date not null
+);
+
+create table tbl_horario_agenda(
+id int not null auto_increment primary key,
+horario datetime not null,
+tbl_agenda_id int not null,
+
+foreign key (tbl_agenda_id) references tbl_agenda(id)
+);
+
+create table tbl_cliente_agenda(
+id int not null auto_increment primary key,
+tbl_cliente_id int not null,
+tbl_agenda_id int not null,
+
+foreign key (tbl_cliente_id) references tbl_cliente(id),
+foreign key (tbl_agenda_id) references tbl_agenda(id)
+);
+
+create table tbl_servico_agenda(
+id int not null auto_increment primary key,
+tbl_servicos_id int not null,
+tbl_agenda_id int not null,
+foreign key (tbl_servicos_id) references tbl_servico(id),
+foreign key (tbl_agenda_id) references tbl_agenda(id)
+
+);
+
+create table tbl_categoria(
+id int not null auto_increment primary key,
+nome varchar(80) not null,
+descricao varchar (200)
+
+);
+
+create table tbl_veiculo(
+id int not null auto_increment primary key,
+nome varchar(80) not null,
+placa varchar(7) not null,
+modelo varchar(45) not null,
+tbl_cliente_id int not null,
+
+foreign key (tbl_cliente_id) references tbl_cliente(id)
+);
+
+
+create table tbl_categoria_veiculo(
+id int not null auto_increment primary key,
+tbl_categoria_id int not null,
+tbl_veiculo_id int not null,
+
+foreign key (tbl_categoria_id) references tbl_categoria(id),
+foreign key (tbl_veiculo_id) references tbl_veiculo(id)
+
+);
+
+create table tbl_veiculo_servico(
+id int not null auto_increment primary key,
+tbl_veiculo_id int not null,
+tbl_servicos_id int not null,
+
+foreign key (tbl_veiculo_id) references tbl_veiculo(id),
+foreign key (tbl_servicos_id) references tbl_servico(id)
+
+);
+
+
+create table tbl_preco_categoria(
+id int not null auto_increment primary key,
+preco float not null,
+tbl_servicos_id int not null,
+tbl_categoria_id int not null,
+
+foreign key (tbl_servicos_id) references tbl_servico(id),
+foreign key (tbl_categoria_id) references tbl_categoria(id)
+);
+
+create table tbl_pagamentos(
+id int not null auto_increment primary key,
+nome_titular varchar(80) not null,
+cpf varchar(14) not null,
+forma_pagamento varchar(30) not null
+);
+
+
+show tables;
+
+insert into tbl_servico(nome, descricao, foto)values(
+"Lavagem Simples",
+"A lavagem simples, muitas vezes realizada em postos de gasolina ou lava-rápidos convencionais,
+geralmente envolve a aplicação de água pressurizada, detergentes automotivos e, em alguns casos, cera protetora.",
+"https://www.agazetanews.com.br/wp-content/uploads/site/images/posts/ipost_zyIqke9SjAHp6XMx64d817cec08a2V7uv2kL91nAwebiC120823.jpg"
+);
+
+
+insert into tbl_cliente(nome,data_nascimento,telefone,email,img)values(
+"Pedro Henrique Lopes Pedraga",
+"2006-03-16",
+"11959747737",
+"pedropedraga@gmail.com",
+"https://cdn-icons-png.flaticon.com/512/6009/6009978.png"
+),
+(
+"Natália Bastazini",
+"2006-08-07",
+"11981954667",
+"natybastazini7@gmail.com",
+"https://cdn-icons-png.flaticon.com/512/6009/6009978.png"
+),
+(
+"Matheus Zanoni",
+"2006-08-27",
+"11947924237",
+"matheu@gmail.com",
+"https://cdn-icons-png.flaticon.com/512/6009/6009978.png"
+)
+;
+
+
+insert into tbl_veiculo(nome,placa,modelo, tbl_cliente_id)values(
+"Nissan Kicks",
+"ABC1234",
+"Hatch",
+2
+),
+(
+"Mitsubishi Lancer",
+"A21B400",
+"Sedan",
+1
+),
+(
+"Gol 2006",
+"1234567",
+"Hatch",
+3
+),
+(
+"Toyota Supra",
+"G0RD4O",
+"Sedan",
+1
+);

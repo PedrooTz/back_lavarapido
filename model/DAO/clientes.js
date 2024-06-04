@@ -104,7 +104,7 @@ const updateCliente =  async function(id, dadosClientes) {
     try{
         let sql;
 
-            sql = `UPDATE tbl_servico SET nome = '${dadosClientes.nome}',
+            sql = `UPDATE tbl_cliente SET nome = '${dadosClientes.nome}',
                 data_nascimento = '${dadosClientes.data_nascimento}',
                 telefone = '${dadosClientes.telefone}',
                 email = '${dadosClientes.email}',

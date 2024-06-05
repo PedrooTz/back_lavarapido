@@ -80,10 +80,10 @@ const selectIdVeiculo = async function() {
     }   
 }
 
-const insertVeiculo =  async function(dadosServicos) {
+const insertVeiculo =  async function(dadosVeiculos) {
     
     try {
-     let sql = `insert into tbl_veiculo(nome, placa, modelo, tbl_cliente_id) values ('${dadosServicos.nome}', '${dadosServicos.placa}', '${dadosServicos.modelo}', ${dadosServicos.tbl_cliente_id} )`
+     let sql = `insert into tbl_veiculo(nome, placa, modelo, tbl_cliente_id, tbl_categoria_id) values ('${dadosVeiculos.nome}', '${dadosVeiculos.placa}', '${dadosVeiculos.modelo}', ${dadosVeiculos.tbl_cliente_id}, ${dadosVeiculos.tbl_categoria_id} )`
             
      
         // Executa o script SQL no banco de dados | Devemos usar execute e não query!
@@ -111,7 +111,8 @@ const updateVeiculo =  async function(id, dadosVeiculos) {
             sql = `UPDATE tbl_veiculo SET nome = '${dadosVeiculos.nome}',
                 placa = '${dadosVeiculos.placa}',
                 modelo = '${dadosVeiculos.modelo}',
-                tbl_cliente_id = '${dadosVeiculos.tbl_cliente_id}'
+                tbl_cliente_id = '${dadosVeiculos.tbl_cliente_id}',
+                tbl_categoria_id = ${dadosVeiculos.tbl_categoria_id}
                 where id = ${id}`
         
                 console.log(sql);

@@ -15,19 +15,22 @@ img varchar(100)
 create table tbl_servico(
 id int not null auto_increment primary key,
 nome varchar(80) not null,
-descricao varchar(255) not null,
-foto varchar(1000) not null,
-id_pagamento int not null,
-
-foreign key(id_pagamento) references tbl_pagamentos(id)
+descricao varchar(1000) not null,
+foto varchar(1000) not null
 );
 
+
 drop table tbl_servico;
+drop table tbl_servico_agenda;
+drop table tbl_veiculo_servico;
+drop table tbl_preco_categoria;
+
 
 create table tbl_agenda(
 id int not null auto_increment primary key,
-calendario date not null
+dia date not null
 );
+
 
 create table tbl_horario_agenda(
 id int not null auto_increment primary key,
@@ -57,9 +60,7 @@ foreign key (tbl_agenda_id) references tbl_agenda(id)
 
 create table tbl_categoria(
 id int not null auto_increment primary key,
-nome varchar(80) not null,
-descricao varchar (200)
-
+nome varchar(80) not null
 );
 
 create table tbl_veiculo(
@@ -68,20 +69,14 @@ nome varchar(80) not null,
 placa varchar(7) not null,
 modelo varchar(45) not null,
 tbl_cliente_id int not null,
-
-foreign key (tbl_cliente_id) references tbl_cliente(id)
-);
-
-
-create table tbl_categoria_veiculo(
-id int not null auto_increment primary key,
 tbl_categoria_id int not null,
-tbl_veiculo_id int not null,
 
-foreign key (tbl_categoria_id) references tbl_categoria(id),
-foreign key (tbl_veiculo_id) references tbl_veiculo(id)
-
+foreign key (tbl_cliente_id) references tbl_cliente(id),
+foreign key (tbl_categoria_id) references tbl_categoria(id)
 );
+
+drop table tbl_veiculo;
+
 
 create table tbl_veiculo_servico(
 id int not null auto_increment primary key,
@@ -104,23 +99,61 @@ foreign key (tbl_servicos_id) references tbl_servico(id),
 foreign key (tbl_categoria_id) references tbl_categoria(id)
 );
 
-create table tbl_pagamentos(
-id int not null auto_increment primary key,
-nome_titular varchar(80) not null,
-cpf varchar(14) not null,
-forma_pagamento varchar(30) not null
-);
+
+
 
 
 show tables;
+
+
+insert into tbl_preco_categoria(preco, tbl_servicos_id, tbl_categoria_id)values(
+""
+);
 
 insert into tbl_servico(nome, descricao, foto)values(
 "Lavagem Simples",
 "A lavagem simples, muitas vezes realizada em postos de gasolina ou lava-rápidos convencionais,
 geralmente envolve a aplicação de água pressurizada, detergentes automotivos e, em alguns casos, cera protetora.",
 "https://www.agazetanews.com.br/wp-content/uploads/site/images/posts/ipost_zyIqke9SjAHp6XMx64d817cec08a2V7uv2kL91nAwebiC120823.jpg"
+),
+(
+"Lavagem Interna",
+"A higienização interna automotiva é o processo de limpeza e desinfecção da parte de dentro do veículo.
+ O objetivo é remover sujeiras, manchas, odores desagradáveis e microrganismos, proporcionando um ambiente limpo, saudável e agradável para os ocupantes do veículo.",
+ "https://rn.olx.com.br/rio-grande-do-norte/servicos/especialista-em-lava-jato-1297440599"
+),
+(
+"Enceramento",
+"O enceramento automotivo funciona como uma proteção à pintura e ao verniz.
+ Diferente do polimento automotivo, em que objetivo é restaurar a pintura e eliminar pequenos riscos e arranhões, a cera tem um papel mais preventivo.",
+ "https://sempresupra.com.br/wp-content/uploads/2022/08/1212-1.jpg"
 );
 
+insert into tbl_veiculo_servico(tbl_veiculo_id, tbl_servicos_id)values(
+"5",
+"1"
+);
+
+insert into tbl_preco_categoria(preco, tbl_categoria_id, tbl_servicos_id)values
+(40,"1","1"),
+(60,"1","2"),
+(120,"1","3"),
+
+(35,"2","1"),
+(40,"2","2"),
+
+(120,"3","1"),
+(150,"3","2"),
+(300,"3","3"),
+
+(220,"4","1"),
+(400,"4","2"),
+(1000,"4","3"),
+
+(40,"5","1"),
+(60,"5","2"),
+(120,"5","3")
+;
 
 insert into tbl_cliente(nome,data_nascimento,telefone,email,img)values(
 "Pedro Henrique Lopes Pedraga",
@@ -140,33 +173,116 @@ insert into tbl_cliente(nome,data_nascimento,telefone,email,img)values(
 "Matheus Zanoni",
 "2006-08-27",
 "11947924237",
-"matheu@gmail.com",
+"matheuzzanoni@gmail.com",
 "https://cdn-icons-png.flaticon.com/512/6009/6009978.png"
 )
 ;
 
+insert into tbl_servico_agenda(tbl_servicos_id, tbl_agenda_id) values(1,1);
 
-insert into tbl_veiculo(nome,placa,modelo, tbl_cliente_id)values(
+insert into tbl_cliente_agenda(tbl_cliente_id, tbl_agenda_id)values(1,1);
+
+insert into tbl_categoria(nome)values(
+"Carro"
+),
+(
+"Moto"
+),
+(
+"Caminhão"
+),
+(
+"Onibus"
+),
+(
+"Van"
+);
+
+insert into tbl_agenda(dia) values
+('2024-04-05'),
+('2024-02-21'),
+('2024-06-04'),
+('2024-01-10'),
+('2024-01-12'),
+('2024-03-28');
+
+insert into tbl_veiculo(nome,placa,modelo, tbl_categoria_id, tbl_cliente_id)values(
 "Nissan Kicks",
 "ABC1234",
 "Hatch",
-2
+2,
+1
 ),
 (
 "Mitsubishi Lancer",
 "A21B400",
 "Sedan",
+1,
 1
 ),
 (
 "Gol 2006",
 "1234567",
 "Hatch",
-3
+3,
+1
 ),
 (
 "Toyota Supra",
 "G0RD4O",
 "Sedan",
+1,
 1
+),
+("BMW R 1200 GS", "0987654","Motocicleta",3,2),
+("Scania R460 Super", "5671234", "R460 Super 6x2",3,3),
+("Onibus Mercedes Benz", "1235674", "Onibus Metropolitano",3,4),
+("Van Mercedes Benz", "0981236", "Sprinter Van",3,5);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+create table tbl_pagamentos(
+id int not null auto_increment primary key,
+nome_titular varchar(80) not null,
+cpf varchar(14) not null,
+forma_pagamento varchar(30) not null
+);
+
+drop table tbl_pagamentos;
+
+insert into tbl_pagamentos(nome_titular, cpf, forma_pagamento)values(
+"Matheus Zanoni",
+"12345678901",
+"Dinheiro"
+),
+(
+"Natalia Bastazini",
+"98765432101",
+"Cartão de Débito"
+),
+(
+"Pedro Pedraga",
+"98765432101",
+"Cartão de Débito"
 );

@@ -27,8 +27,10 @@ const getListarVeiculos = async function(){
     if(dadosVeiculos){
         if(dadosVeiculos.length > 0){
             for(let veiculo of dadosVeiculos){
-                veiculo.cliente = await clienteDAO.selectByIdCliente(veiculo.tbl_cliente_id)
                 veiculo.categoria = await categoriaDAO.selectByIdCategoria(veiculo.tbl_categoria_id)
+                veiculo.cliente = await clienteDAO.selectByIdCliente(veiculo.tbl_cliente_id)
+                delete veiculo.tbl_categoria_id
+                delete veiculo.tbl_cliente_id
             }
         // Montando a estrutura do JSOm
         veiculosJSON.veiculos = dadosVeiculos;
@@ -65,8 +67,8 @@ const getBuscarVeiculo = async function(id){
         // Validação para verificar se existem dados encontrados
         if(dadosVeiculos){
             for(let veiculo of dadosVeiculos){
-                veiculo.cliente = await clienteDAO.selectByIdCliente(veiculo.tbl_cliente_id)
                 veiculo.categoria = await categoriaDAO.selectByIdCategoria(veiculo.tbl_categoria_id)
+                veiculo.cliente = await clienteDAO.selectByIdCliente(veiculo.tbl_cliente_id)
             }
             // Validação para verificar se existem dados de retorno
             if(dadosVeiculos.length > 0){
@@ -133,7 +135,9 @@ const setInserirNovoVeiculo = async function(dadosVeiculos, contentType){
         if( dadosVeiculos.nome == ''                       || dadosVeiculos.nome == undefined              || dadosVeiculos.nome.length > 150 ||
             dadosVeiculos.placa == ''  || dadosVeiculos.placa == undefined || dadosVeiculos.placa.length > 8 ||
             dadosVeiculos.modelo == '' || dadosVeiculos.modelo == undefined || dadosVeiculos.modelo.length > 1000  ||
-            dadosVeiculos.tbl_cliente_id == '' || dadosVeiculos.tbl_cliente_id == undefined  || dadosVeiculos.tbl_cliente_id.length > 1
+            dadosVeiculos.tbl_cliente_id == '' || dadosVeiculos.tbl_cliente_id == undefined  || dadosVeiculos.tbl_cliente_id.length > 1   ||
+            dadosVeiculos.tbl_categoria_id == '' || dadosVeiculos.tbl_categoria_id == undefined  || dadosVeiculos.tbl_categoria_id.length > 1  
+
         ){
             console.log(dadosVeiculos)
             return message.ERROR_REQUIRED_FIELDS // 400 Campos obrigatórios / Incorretos
@@ -188,7 +192,8 @@ const setInserirNovoVeiculo = async function(dadosVeiculos, contentType){
                 if(dadosVeiculos.nome == ''                       || dadosVeiculos.nome == undefined              || dadosVeiculos.nome.length > 150 ||
                 dadosVeiculos.placa == ''  || dadosVeiculos.placa == undefined || dadosVeiculos.placa.length > 8 ||
                 dadosVeiculos.modelo == '' || dadosVeiculos.modelo == undefined || dadosVeiculos.modelo.length > 1000  ||
-                dadosVeiculos.tbl_cliente_id == '' || dadosVeiculos.tbl_cliente_id == undefined  || dadosVeiculos.tbl_cliente_id.length > 1
+                dadosVeiculos.tbl_cliente_id == '' || dadosVeiculos.tbl_cliente_id == undefined  || dadosVeiculos.tbl_cliente_id.length > 1  ||
+                dadosVeiculos.tbl_categoria_id == '' || dadosVeiculos.tbl_categoria_id == undefined  || dadosVeiculos.tbl_categoria_id.length > 1 
         ){
                 return message.ERROR_REQUIRED_FIELDS
             } else {

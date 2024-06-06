@@ -5,6 +5,8 @@
 const message = require('../modulo/config.js')
 
 const servicosDAO = require('../model/DAO/servicos.js')
+const precoCategoriaDAO = require('../model/DAO/preco_categoria.js');
+const veiculos = require('../model/DAO/veiculos.js');
 
 // Função para listar os filmes existentes 
 const getListarServicos = async function(){

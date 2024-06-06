@@ -20,6 +20,7 @@ foto varchar(1000) not null
 );
 
 
+
 drop table tbl_servico;
 drop table tbl_servico_agenda;
 drop table tbl_veiculo_servico;
@@ -101,10 +102,7 @@ foreign key (tbl_categoria_id) references tbl_categoria(id)
 
 
 
-
-
 show tables;
-
 
 insert into tbl_preco_categoria(preco, tbl_servicos_id, tbl_categoria_id)values(
 ""
@@ -182,6 +180,13 @@ insert into tbl_servico_agenda(tbl_servicos_id, tbl_agenda_id) values(1,1);
 
 insert into tbl_cliente_agenda(tbl_cliente_id, tbl_agenda_id)values(1,1);
 
+select , n.id from tbl_nacionalidade_ator as i
+        join tbl_nacionalidade as n on i.id_nacionalidade=n.id
+        join tbl_ator as a on i.id_ator=a.id
+        where a.id=
+
+select * from tbl_cliente_agenda where id = 1;
+
 insert into tbl_categoria(nome)values(
 "Carro"
 ),
@@ -206,7 +211,7 @@ insert into tbl_agenda(dia) values
 ('2024-01-12'),
 ('2024-03-28');
 
-insert into tbl_veiculo(nome,placa,modelo, tbl_categoria_id, tbl_cliente_id)values(
+insert into tbl_veiculo(nome,placa,modelo, tbl_cliente_id, tbl_categoria_id)values(
 "Nissan Kicks",
 "ABC1234",
 "Hatch",

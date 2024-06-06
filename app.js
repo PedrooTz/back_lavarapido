@@ -43,6 +43,10 @@ const bodyParserJSON = bodyParser.json();
 
     const controllerCategorias = require('./controller/controller_categoria.js')
 
+    const controllerPrecos = require('./controller/controller_precocategoria.js')
+
+    const controllerAgenda = require('./controller/controller_agenda.js')
+
 
 // ************************************************************************************************* //
 //Função para configurar as permissões do cors
@@ -347,7 +351,78 @@ app.put('/v1/lavarapido/updatecategoria/:id', cors(), bodyParserJSON, async func
     response.json(dadosCategoria)
 })
 
+/*******************************************************************************/
+/*******************************************************************************/
+                                // CRUD PREÇOS
+/*******************************************************************************/
+/*******************************************************************************/
 
+
+
+
+
+app.get('/v1/lavarapido/precos', cors(), async function(request,response,next){
+    
+    // Chama a função para retornar os dados do filme
+    let dadosPreco = await controllerPrecos.getListarPrecos();
+
+    // Validação para verificar se existem dados
+    if(dadosPreco){
+        response.json(dadosPreco)
+        response.status(200);
+    }else{
+        response.json({message: 'Nenhum registro encontrado'})
+        response.status()
+    }
+});
+
+app.get('/v1/lavarapido/preco/:id', cors(), async function(request, response, next){
+    // Recebe o id da requisição 
+    let idPreco = request.params.id;
+  
+    // Solicita para a controller o ator filtrando pelo id
+    let dadosPreco = await controllerPrecos.getBuscarPrecos(idPreco);
+  
+     response.status(dadosPreco.status_code);
+     response.json(dadosPreco);
+   
+});
+
+
+/*******************************************************************************/
+/*******************************************************************************/
+                                // CRUD AGENDA
+/*******************************************************************************/
+/*******************************************************************************/
+
+
+
+app.get('/v1/lavarapido/agenda', cors(), async function(request,response,next){
+    
+    // Chama a função para retornar os dados do filme
+    let dadosAgenda = await controllerAgenda.getListarAgenda();
+
+    // Validação para verificar se existem dados
+    if(dadosAgenda){
+        response.json(dadosAgenda)
+        response.status(200);
+    }else{
+        response.json({message: 'Nenhum registro encontrado'})
+        response.status()
+    }
+});
+
+app.get('/v1/lavarapido/agenda/:id', cors(), async function(request, response, next){
+    // Recebe o id da requisição 
+    let idAgenda = request.params.id;
+  
+    // Solicita para a controller o ator filtrando pelo id
+    let dadosAgenda = await controllerAgenda.getBuscarAgenda(idAgenda);
+  
+     response.status(dadosAgenda.status_code);
+     response.json(dadosAgenda);
+   
+});
 
 
 

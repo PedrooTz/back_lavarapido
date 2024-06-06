@@ -18,14 +18,10 @@ model tbl_cliente {
 }
 
 model tbl_servico {
-  id             Int            @id @default(autoincrement())
-  nome           String         @db.VarChar(80)
-  descricao      String         @db.VarChar(255)
-  foto           String         @db.VarChar(1000)
-  id_pagamento   Int
-  tbl_pagamentos tbl_pagamentos @relation(fields: [id_pagamento], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "tbl_servico_ibfk_1")
-
-  @@index([id_pagamento], map: "id_pagamento")
+  id        Int    @id @default(autoincrement())
+  nome      String @db.VarChar(80)
+  descricao String @db.VarChar(1000)
+  foto      String @db.VarChar(1000)
 }
 
 model tbl_veiculo {
@@ -46,12 +42,4 @@ model tbl_categoria {
   id          Int           @id @default(autoincrement())
   nome        String        @db.VarChar(80)
   tbl_veiculo tbl_veiculo[]
-}
-
-model tbl_pagamentos {
-  id              Int           @id @default(autoincrement())
-  nome_titular    String?       @db.VarChar(80)
-  cpf             String?       @db.VarChar(14)
-  forma_pagamento String?       @db.VarChar(30)
-  tbl_servico     tbl_servico[]
 }

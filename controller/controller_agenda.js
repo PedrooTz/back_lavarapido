@@ -6,6 +6,12 @@ const message = require('../modulo/config.js')
 
 const agendaDAO = require('../model/DAO/agenda.js')
 
+const servicoAgendaDAO  = require ('../model/DAO/servico_agenda.js')
+const servicoDAO  = require ('../model/DAO/servicos.js')
+
+const clienteAgendaDAO = require('../model/DAO/cliente_agenda.js')
+const clienteDAO = require('../model/DAO/clientes.js')
+
 // Função para listar os filmes existentes 
 const getListarAgenda = async function(){
     
@@ -24,6 +30,10 @@ const getListarAgenda = async function(){
     // Verifica se existem dados retornados do DAO
     if(dadosAgenda){
         if(dadosAgenda.length > 0){
+            for(let agenda of dadosAgenda){
+                agenda.cliente = await clienteDAO.selectByIdCliente(agenda.id)
+                agenda.servico = await servicoDAO.selectByIdServico(agenda.id)
+            }
         // Montando a estrutura do JSOm
         agendaJSON.dias = dadosAgenda;
         agendaJSON.quantidade = dadosAgenda.length;
